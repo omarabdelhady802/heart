@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.title("Flask Template in Streamlit")
+st.title("Heart Disease Prediction")
 
 # Flask URL (ensure Flask is running)
 flask_url = "http://127.0.0.1:5000"
