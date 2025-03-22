@@ -14,12 +14,17 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
+        feature_min_max = {
+    'thalach': (71, 202)  # Min & max values for thalach
+    }
         # Ensure all form fields are captured
         expected_features = ['cp', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
         features = [float(request.form.get(f, 0)) for f in expected_features]
         
         # Convert input to NumPy array and reshape for prediction
         input_data = np.array(features).reshape(1, -1)
+        X_min, X_max = feature_min_max['thalach']
+        input_data[:, 1] = (input_data[:, 1] - X_min) / (X_max - X_min)
         prediction = model.predict(input_data)
         
         # Interpret prediction

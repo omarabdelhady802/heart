@@ -1,6 +1,7 @@
 import pandas as pd
 import joblib
 from experta import Fact
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
@@ -27,7 +28,11 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 dt_model = joblib.load("heart_disease_model.pkl")
 
 def evaluate_decision_tree():
-    y_pred_dt = dt_model.predict(X_test)
+    x_normalized =X_test
+    numerical_cols = ["thalach"]
+    scaler = MinMaxScaler()
+    x_normalized[numerical_cols] = scaler.fit_transform(x_normalized[numerical_cols])
+    y_pred_dt = dt_model.predict(x_normalized)
     return {
         "accuracy": accuracy_score(y_test, y_pred_dt),
         "precision": precision_score(y_test, y_pred_dt),
